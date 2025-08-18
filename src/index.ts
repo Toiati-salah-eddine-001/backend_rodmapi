@@ -84,6 +84,28 @@ const app = new Elysia()
   }
 })
 
+.delete('/deletuser/:id', async ({params,set})=>{
+  const { id } = params;
+
+  if (!id) {
+    set.status = 400;
+    return { success: false, message: 'Roadmap ID is required' };
+  }
+
+  try {
+    const { data, error } = await supabase.from('roadmaps').delete().eq('id', id);
+
+    if (error) {
+      set.status = 500;
+      return { success: false, message: error.message };
+    }
+
+    return { success: true, data };
+  } catch (err) {
+    set.status = 500;
+    return { success: false, message: err instanceof Error ? err.message : 'Unknown error' };
+  }
+});
 
 
 
