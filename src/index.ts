@@ -6,6 +6,7 @@ import { generateRoadmap } from "./ roadmapAgent";
 import { supabase } from "./connection";
 import insertRoadmap  from "./Roadmap";
 import { getUserRoadmaps } from "./getUserRoadmaps";
+import { getRoadmapById } from "./getroadmap";
 
 
 const app = new Elysia()
@@ -105,9 +106,38 @@ const app = new Elysia()
     set.status = 500;
     return { success: false, message: err instanceof Error ? err.message : 'Unknown error' };
   }
-});
+})
 
+.post("/getroadmap/:id", async ({params,set})=>{
+  try{
+    const {id}=params
 
+    if (!id) {
+      set.status = 400;
+      return { success: false, message: 'Roadmap ID is required' };
+    }
+      const {data,error}= await getRoadmapById(id)
+  
+      if (error) {
+        set.status = 500;
+        return { success: false, message: error };
+      }
+  
+      return {
+        success:true,
+        data,
+        error
+      }
+  }catch (err: any) {
+    console.error("Server error:", err);
+    set.status = 500;
+    return {
+      success: false,
+      message: "Internal server error",
+      error: err.message || err,
+    };
+  }
+})
 
 
 
