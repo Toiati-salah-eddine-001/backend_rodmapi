@@ -10,7 +10,7 @@ import { getRoadmapById } from "./getroadmap";
 
 
 const app = new Elysia()
-.get('/',()=>{
+.get('/hello',()=>{
   return 'hello salah'
 })
 
@@ -146,7 +146,4 @@ const app = new Elysia()
 
 
 
-app.listen(5000);
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+export default app;
